@@ -1,4 +1,4 @@
-Entites: Users, Banks, Account, Manager, Branch, roles
+Entites: Users, Banks, Account, Manager, Branch, roles, currency
 
 
 Users:    userid(primary key), username, address, bankname(FK and navigation property), branch(FK and navigation property), accounttype, role(FK and navigation property). 
@@ -7,3 +7,4 @@ Account:  AccountId(PK), balance, limit, navigation property to be written.
 Manager:  managerId(Pk), managerName, branchid(FK)-Navigation property: branchId, roles-navigation property and FK
 Branch:   branchId(PK), branchLocation, address, managerId, phone.
 roles:    normal user, bank user(employee), bank admin. navigation property to be written
+currency: currencyShortTerm, currencyType, decimal, country
