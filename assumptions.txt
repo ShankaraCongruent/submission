@@ -2,7 +2,7 @@
 2. DB name: training
 	Schema name: training
 	Entity format: traning.training.[EnitityName]
-	NOTE: should not use master, all db, schema everything should be lowecase
+	NOTE: should not use master, all db, schema everything should be lowercase
 3. All entity has 4 Audit columns: CreatedBy, CreatedOn, ModifiedBy, ModifiedOn
 4. Dependency Injection is used for services and repositories.
 5. Exception handling with try/catch at the service and controller level.
@@ -22,4 +22,9 @@ Implicit assumptions:
 	1.Using NVARCHAR datatype in most places to eliminate unicode error '[?]' and support data entered by user is being consistent in the database. 
 	2. Assuming IDENTITY(seed,increment) for all PK to ensure auto increment for all records that is being inserted.
 	3. Assuming DEFAULT for ModifiedOn field to record the time automatically.
-	4. Assuming AccountType CHECK (AccountType IN('Saving','Current','TermDeposit')). This can also be acheived by writing them in Enum
+	4. Assuming AccountType CHECK (AccountType IN('Saving','Current','TermDeposit')). This can also be acheived by writing them in Enum.
+	5. Added LastLogin to check the scope when does user logged recently where token expiration depends on that.
+	6. lastLogin + JWT RefreshToken fields allow secure token expiration & reauthentication.
+	7. Transaction history is maintained per account — via Transaction entity.
+	8. No accidental account deletion if user is deleted — account remains as historical record.
+	 
