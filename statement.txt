@@ -1,12 +1,15 @@
 Title: Simple User and Account Management System
-Objective: To design and implement User and Account abide by oop.
+Objective: To design and implement User and Account abide by oop,
+			create JWT tokens,
+			create API
+			
 Features:
 	1. User Management
 		- Add, update and assign roles to users
 		- Users may have multiple accounts across multiple banks.
 	2. Account Management:
 		- Create, operate and close accounts(limited by role permissions)
-		- Support Saving, Current and Trem Deposit accounts.
+		- Support Saving, Current and Term Deposit accounts.
 		- Support multiple currencies (for NRI accounts).
 	3. Bank & Branch Management:
 		- Each Bank can have multiple branches.
