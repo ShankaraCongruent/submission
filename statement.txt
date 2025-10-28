@@ -1,0 +1,19 @@
+Title: Simple User and Account Management System
+Objective: To design and implement User and Account abide by oop.
+Features:
+	1. User Management
+		- Add, update and assign roles to users
+		- Users may have multiple accounts across multiple banks.
+	2. Account Management:
+		- Create, operate and close accounts(limited by role permissions)
+		- Support Saving, Current and Trem Deposit accounts.
+		- Support multiple currencies (for NRI accounts).
+	3. Bank & Branch Management:
+		- Each Bank can have multiple branches.
+		- Each Branch is managed by a manager.
+	4. Permissions & Roles:
+		- NormalUser: Deposit, withdraw(limited), check balance.
+		- BankUser: Operate accounts(limited), Approve transaction.
+		- Admin: Full privileges.
+	
+	

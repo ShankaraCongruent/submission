@@ -1,0 +1,25 @@
+1. developed using c#(.NET 8)
+2. DB name: training
+	Schema name: training
+	Entity format: traning.training.[EnitityName]
+	NOTE: should not use master, all db, schema everything should be lowecase
+3. All entity has 4 Audit columns: CreatedBy, CreatedOn, ModifiedBy, ModifiedOn
+4. Dependency Injection is used for services and repositories.
+5. Exception handling with try/catch at the service and controller level.
+6. Each User can multiple Accounts, but each account belong to one branch.
+7. Each Bank can have multiple branches and one manager.
+8. Accounts can be of 3 types:
+	- savings
+	- current
+	- TermDeposit
+9. currency allows multi-currency accounts(for NRI users)
+10. Roles to determine user privileges:
+			ROLE 				ACTIONS
+			NormalUser			Balance, deposit,withdraw(limited because if user age<18 need POA), operate accounts(change PIN)
+			BankUser			Operate accounts of customer(update user mobileNo)
+			Admin				manage banks, branches and users
+Implicit assumptions:
+	1.Using NVARCHAR datatype in most places to eliminate unicode error '[?]' and support data entered by user is being consistent in the database. 
+	2. Assuming IDENTITY(seed,increment) for all PK to ensure auto increment for all records that is being inserted.
+	3. Assuming DEFAULT for ModifiedOn field to record the time automatically.
+	4. Assuming AccountType CHECK (AccountType IN('Saving','Current','TermDeposit')). This can also be acheived by writing them in Enum
