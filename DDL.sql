@@ -1,5 +1,13 @@
-CREATE SCHEMA IF NOT EXISTS training;
-
+--create db and schema
+IF DB_ID('training') IS NULL
+	CREATE DATABASE training;
+GO
+USE training;
+GO
+IF NOT EXISTS CREATE (SELECT * FROM sys.schemas WHERE name='training')
+	EXEC('CREATE SCHEMA training');
+GO
+--create tables
 CREATE TABLE training.training.Role(
 	RoleId INT PRIMARY KEY IDENTITY(1,1),
 	RoleName NVARCHAR(50) NOT NULL,
