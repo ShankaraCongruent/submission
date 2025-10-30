@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+//This file is not need of an hour. But for future extension
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BankCustomerAPI.Models
