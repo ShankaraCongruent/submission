@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C# project\\submission\\Bank\\Bank\\BankCustomerAPI.csproj": {}
+    "D:\\C# project\\submission\\Bank\\BankCustomerAPI.csproj": {}
   },
   "projects": {
-    "D:\\C# project\\submission\\Bank\\Bank\\BankCustomerAPI.csproj": {
+    "D:\\C# project\\submission\\Bank\\BankCustomerAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C# project\\submission\\Bank\\Bank\\BankCustomerAPI.csproj",
+        "projectUniqueName": "D:\\C# project\\submission\\Bank\\BankCustomerAPI.csproj",
         "projectName": "BankCustomerAPI",
-        "projectPath": "D:\\C# project\\submission\\Bank\\Bank\\BankCustomerAPI.csproj",
+        "projectPath": "D:\\C# project\\submission\\Bank\\BankCustomerAPI.csproj",
         "packagesPath": "C:\\Users\\shankaranarayanan.v\\.nuget\\packages\\",
-        "outputPath": "D:\\C# project\\submission\\Bank\\Bank\\obj\\",
+        "outputPath": "D:\\C# project\\submission\\Bank\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -53,6 +53,10 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -66,6 +70,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.14.0, )"
             }
           },
           "imports": [

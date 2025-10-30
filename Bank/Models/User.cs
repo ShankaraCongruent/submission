@@ -13,7 +13,9 @@ namespace BankCustomerAPI.Models
         [Required]
         public string Email { get; set; } = string.Empty;
         [Required]
-        public byte[] Password { get; set; } = Array.Empty<byte>();
+        public string Password { get; set; } = string.Empty;
+
+        public DateTime? DateOfBirth { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
         public bool IsActive { get; set; }
