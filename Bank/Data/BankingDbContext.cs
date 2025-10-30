@@ -19,7 +19,7 @@ namespace BankingCustomerAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+          //restricts standard cycle(FK issues)
             modelBuilder.Entity<Account>()
                 .HasMany(a=>a.Transactions)
                 .WithOne(t=>t.Account)
