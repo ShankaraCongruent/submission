@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+//This file is not need of an hour. But helps for future extension
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
