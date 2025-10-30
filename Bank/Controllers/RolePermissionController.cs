@@ -32,7 +32,7 @@ namespace BankCustomerAPI.Controllers
                     return BadRequest("Already seeded.");
                 }
 
-                // 1️⃣ Create Roles
+                //Create Roles
                 var roles = new List<Role>
                 {
                     new Role { RoleName = "Admin" },
@@ -40,7 +40,7 @@ namespace BankCustomerAPI.Controllers
                     new Role { RoleName = "NormalUser" }
                 };
 
-                // 2️⃣ Create Permissions
+                // Create Permissions
                 var permissions = new List<Permission>
                 {
                     new Permission { PermissionCode = "CAN_VIEW_ACCOUNT" },
@@ -70,7 +70,7 @@ namespace BankCustomerAPI.Controllers
                 int manageUsersId = dbPermissions.First(p => p.PermissionCode == "CAN_MANAGE_USERS").PermissionId;
                 int manageBankId = dbPermissions.First(p => p.PermissionCode == "CAN_MANAGE_BANK").PermissionId;
 
-                // 3️⃣ Map Role → Permission
+                //Map Role → Permission
                 var rolePermissions = new List<RolePermission>
                 {
                     // Admin → all permissions
