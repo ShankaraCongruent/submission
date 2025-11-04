@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <!--HEAD SECTION STARTS-->
+  <head>
+    <title>Shankara's webpage</title>
+   <link rel="stylesheet" href="styleresume.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+  </head>
+  <!--HEAD SECTION END-->
+  <!--ALL CONTENT GO IN HERE-->
+  <body>
+    <!--HEADER SECTION STARTS-->
+    <header>
+      <!--KEEP OUR LOGO-->
+      <!--MESSAGE ABOUT ME-->
+      <h1>Hi! I am Shankara <span>Narayanan</span></h1>
+      <!--CALL ME BUTTON-->
+      <a href="#contact">Say Hello!</a>
+    </header>
+    <!--HEADER SECTION ENDS-->
+    <section id="about">
+      <h2>About me</h2>
+      <p>I'm someone who enjoys building and debugging real-world software.</p>
+    </section>
+    <!--SKILL SECTION STARTS-->
+    <section id="skills">
+        <div class="toplevel">
+            <h3><span class="star">★</span> .NET</h3>
+            <ul>
+                <li>Entity Framework</li>
+                <li>LINQ</li>
+                <li>Dapper</li>  
+            </ul>   
+        </div>
+        <div class="toplevel">
+          <h3><span class="star">★</span> Java</h3>
+            <ul>
+                <li>Core Java</li>
+                <li>J2EE</li>
+                <li>Spring Boot</li>
+            </ul>
+        </div>
+    </section>
+    <!--SKILL SECTION ENDS-->
+    <!--CONTACT ME-->
+    <div id="contact">
+      <h2>Impressed with my work ?</h2>
+      <form method="post" action="someserver">
+        <input type="text" name="First Name" placeholder="Enter First Name" />
+        <input type="text" name="Last Name" placeholder="Enter Last name" />
+        <textarea
+          name=""
+          id=""
+          placeholder="Enter your message for Shankara"
+        ></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+   
+    <div class="gallery">
+        <h2>Some of my shots from recent trips</h2>
+        <div>
+            <div>
+                <img src="https://unsplash.it/300/200?image=10">
+                <img src="https://unsplash.it/300/200?image=2">
+                <img src="https://unsplash.it/300/200?image=32">
+            </div>
+            <div>
+                <img src="https://unsplash.it/600/200?image=4">
+                <img src="https://unsplash.it/300/200?image=43">
+            </div>
+            
+        </div>
+    </div>
+    <!--END OF GALLERY-->
+    <hr/>
+    <div id="newsletter">
+        <h2>Lets stay connected<br><span>Here is my free newsletter</span></h2>
+        <div class="newsletter-input">
+            <input type="text" name="Newsletter">
+        </div>
+        <div>
+            <a type="submit">Subscribe</a>
+        </div>
+    </div>
+
+    <!-- GITHUB -->
+
+    <div id="poweredby">
+      <p>
+        Powered by 
+        <span class="github-container">
+          <svg class="github-icon" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 008 10.9c.6.1.8-.25.8-.55v-2c-3.25.7-3.9-1.55-3.9-1.55a3.07 3.07 0 00-1.25-1.7c-1-.7.1-.7.1-.7a2.4 2.4 0 011.75 1.2 2.5 2.5 0 003.4 1 2.5 2.5 0 01.75-1.55c-2.6-.3-5.35-1.3-5.35-5.75a4.47 4.47 0 011.2-3.1 4.1 4.1 0 01.1-3.05s1-.3 3.3 1.2a11.3 11.3 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2a4.1 4.1 0 01.1 3.05 4.47 4.47 0 011.2 3.1c0 4.45-2.75 5.45-5.35 5.75a2.8 2.8 0 01.8 2.2v3.3c0 .3.2.65.8.55A11.5 11.5 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/>
+          </svg>
+          GitHub
+        </span>
+      </p>
+    </div>
+      <!--FOOTER-->
+      <footer>
+        <p>Copyright @2025 All rights reserved</p>
+      </footer>
+    </div>
+  </body>
+</html>
