@@ -248,7 +248,153 @@ export function basicMath() {
       console.error("Error in squares function:", e);
     }
   }
+  //UPDATED 
+  //SCOPING AND CLOSURE USING VAR AND LET
+try {
+  let vals = [];
+
+  // Using var
+  for (var x = 0; x < 4; x++) {
+    vals.push(() => x);
+  }
+  console.log("Using vars (with map):", vals.map(f => f()));
   
+  // Print using for-of loop instead of .map()
+  console.log("Using vars (with loop):");
+  for (let f of vals) {
+    console.log(f());
+  }
+
+  // Reset
+  vals = [];
+
+  // Using let
+  for (let x = 0; x < 4; x++) {
+    vals.push(() => x);
+  }
+  console.log("Using lets (with map):", vals.map(f => f()));
+
+  console.log("Using lets (with loop):");
+  for (let f of vals) {
+    console.log(f());
+  }
+
+} catch (err) {
+  console.error("Error occurred:", err);
+}
+
+
+//CONST FREEZE, SEAL 
+const car = { brand: "Toyota", year: 2010 };
+console.log("Initial object:", car);
+
+try {
+  car = { brand: "Honda" };
+} catch (error) {
+  console.log("Error: Cannot reassign a constant variable.");
+}
+
+try {
+  //Modifying an inner property (allowed for const)
+  car.year = 2025;
+  console.log("Updated property (allowed for const objects):", car);
+} catch (error) {
+  console.log("Error while changing property:", error);
+}
+
+try {
+  Object.freeze(car);
+  car.year = 2030; 
+  console.log("After Object.freeze (attempt to modify fails silently):", car);
+} catch (error) {
+  console.log("Error while modifying a frozen object:", error);
+}
+
+try {
+  // Seal the object — can’t add/remove properties, but can modify existing ones if not frozen
+  Object.seal(car);
+  car.model = "Corolla"; // adding new property fails silently
+  console.log("After Object.seal (cannot add new properties):", car);
+} catch (error) {
+  console.log("Error while sealing or adding property:", error);
+}
+
+// Demonstrate with strict mode inside a function
+function demoFreezeSeal(obj) {
+  "use strict";
+  try {
+    Object.freeze(obj);
+    obj.year = 2040; // Throws TypeError in strict mode
+  } catch (error) {
+    console.log("Strict mode error when modifying frozen object:", error.message);
+  }
+
+  try {
+    Object.seal(obj);
+    obj.color = "Red"; // Throws in strict mode (can't add)
+  } catch (error) {
+    console.log("Strict mode error when adding property to sealed object:", error.message);
+  }
+
+  console.log("Final object inside demoFreezeSeal:", obj);
+}
+
+try {
+  demoFreezeSeal(car);
+} catch (error) {
+  console.log("Error while calling demoFreezeSeal:", error);
+}
+
+//STRING LITERALS
+try {
+  const myname = "Shankara";
+  console.log("Using String Templates:", `${myname}`);
+
+  let linearEq = [];
+
+  // Generate values for the equation y = 2x + 1
+  for (let x = 1; x <= 10; x++) {
+    linearEq.push({ x, y: 2 * x + 1 });
+  }
+
+  // Object literal with an inline function
+  const foo = {
+    f(x) {
+      return x * 2 + 5;
+    },
+  };
+
+  console.log("foo.f(4) → Inside function of object literal:", foo.f(4));
+  console.log("Generated (x, y) pairs from linear equation y = 2x + 1:");
+  console.log(linearEq);
+} catch (error) {
+  console.error("An error occurred while executing the code:", error.message);
+}
+
+//SYMBOLS
+try {
+  const js_obj = { 
+    name: "Sriram", 
+    age: 60, 
+    salary: 100, 
+    [Symbol.toPrimitive](hint) {
+      if (hint === "number") return this.age; 
+      if (hint === "default" || hint === "string") 
+        return JSON.stringify(this);
+    }
+  };
+
+  console.log("STRING:", `${js_obj}`);
+  console.log("DEFAULT:", (js_obj + ''));  
+  console.log("NUMBER:", +js_obj);
+  console.log("Since you gave up:", js_obj);
+
+} catch (error) {
+  console.error("Error occurred while demonstrating Symbol.toPrimitive:", error);
+}
+
+
+
   // Run all examples
   export function runAllExamples() {
     console.log("Running all examples...\n");
