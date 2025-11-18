@@ -1,0 +1,118 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using SelfManagedBankApplication.DataProviders;
+using SelfManagedBankApplication.Services;
+using SelfManagedBankApplication.Utilities;
+using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
+using System.Text;
+
+namespace SelfManagedBankApplication.Controllers
+{
+    [Route("bankemployee")]
+    public class BankEmployeeAuthController(BankDbContext context, ILogger<BankEmployeeAuthController> logger, JwtTokenService jwtTokenService) : ControllerBase
+    {
+        private readonly BankDbContext _context = context;
+        private readonly JwtTokenService _jwtTokenService = jwtTokenService;
+        private readonly ILogger<BankEmployeeAuthController> _logger = logger;
+        public class LoginRequest
+        {
+            public string Username { get; set; } = string.Empty;
+            public string Password { get; set; } = string.Empty;
+        }
+
+        public class LoginResponse
+        {
+            public string Token { get; set; } = string.Empty;
+            public string RefreshToken { get; set; } = string.Empty;
+        }
+
+        public class ValidateTokenRequest
+        {
+            public string Token { get; set; } = string.Empty;
+        }
+
+        public class ValidateTokenResponse
+        {
+            public Boolean isValid { get; set; } = false; 
+        }
+
+        [HttpPost("verify")]
+        public IActionResult Verify([FromBody] ValidateTokenRequest request)
+        {
+            if (null == request || String.IsNullOrEmpty(request.Token)) { return BadRequest(); }
+            Boolean isValid = _jwtTokenService.VerifyToken(request.Token);
+            if (!isValid)
+            {
+                {
+                    return Ok(new { valid = false });
+                }
+            }
+            return Ok(new { valid = true });
+
+        }
+
+        [HttpPost("refresh")]
+        public IActionResult Refresh([FromBody] LoginResponse tokens)
+        {
+            var username = new JwtSecurityTokenHandler().ReadJwtToken(tokens.Token).Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (username == null)
+            {
+                return BadRequest();    
+            }
+            if (!RefreshTokenStore.Tokens.TryGetValue(username, out var storedToken) || storedToken != tokens.RefreshToken)
+                return Unauthorized("Invaluid Token");
+
+            var employee = _context.Employees
+                .Include(e => e.BankEmployeeRoles)
+    .ThenInclude(er => er.Role)
+    .FirstOrDefault(e => e.Username == username);
+            if (employee == null)
+            {
+                return BadRequest();
+            }
+
+            var newAccessToken = _jwtTokenService.GenerateToken(employee);
+            var newRefreshToken = _jwtTokenService.GenerateRefreshToken();
+            RefreshTokenStore.Tokens[username] = newRefreshToken;
+
+            return Ok(new LoginResponse
+            {
+                Token = newAccessToken,
+                RefreshToken = newRefreshToken
+            });
+        }
+
+
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest request)
+        {
+            if(request==null)
+            {
+                return BadRequest();
+            }
+            _logger.LogInformation(request.Username, request.Password);
+            var employee = _context.Employees
+                .Include(e => e.BankEmployeeRoles)
+                .ThenInclude(er => er.Role)
+                .FirstOrDefault(e => e.Username == request.Username);
+
+            if (employee == null || !PasswordHelper.VerifyPassword(request.Password, employee.PasswordHash))
+            {
+                _logger.LogWarning("Failed login attempt for username: {Username}", request.Username);
+                _logger.LogCritical("Passwd {passwd}",request.Password);
+                return Unauthorized();
+            }
+
+            var token = _jwtTokenService.GenerateToken(employee);
+            var refreshToken = _jwtTokenService.GenerateRefreshToken();
+            RefreshTokenStore.Tokens[request.Username] = refreshToken;
+
+            return Ok(new LoginResponse { Token = token, RefreshToken = refreshToken } );
+        }
+    }
+
+   
+}

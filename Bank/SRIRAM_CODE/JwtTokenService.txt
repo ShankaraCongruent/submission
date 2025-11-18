@@ -1,0 +1,92 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.IdentityModel.Tokens;
+using SelfManagedBankApplication.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using static SelfManagedBankApplication.Controllers.BankEmployeeAuthController;
+
+namespace SelfManagedBankApplication.Services
+{
+    public static class RefreshTokenStore
+    {
+        public static Dictionary<string, string> Tokens = new(); // username → refresh token
+    }
+
+    public class JwtTokenService(IConfiguration config)
+    {
+        private readonly IConfiguration _config = config;
+
+        public string GenerateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        }
+
+        public Boolean VerifyToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:SecretKey"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            try
+            {
+                handler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken); 
+
+                return true; 
+            }
+            catch
+            {
+                return false; 
+            }
+
+        }
+
+        public string GenerateToken(BankEmployee employee)
+        {
+            var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, employee.Username)
+        };
+
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, employee.Username));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+            // Add role claims from the employee's roles
+            foreach (var empRole in employee.BankEmployeeRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, empRole.Role.Name));
+            }
+            // start of custom claims
+            // Add bank and branch claims if present
+            if (employee.BankId.HasValue)
+            {
+                claims.Add(new Claim("BankId", employee.BankId.Value.ToString()));
+            }
+            if (employee.BranchId.HasValue)
+            {
+                claims.Add(new Claim("BranchId", employee.BranchId.Value.ToString()));
+            }
+            // end of custom claims
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:SecretKey"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _config["JwtSettings:Issuer"],
+                audience: _config["JwtSettings:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(_config["JwtSettings:ExpiryMinutes"]!)),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
+}
