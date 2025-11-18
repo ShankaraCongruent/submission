@@ -139,12 +139,13 @@ namespace BankCustomerAPI.Controllers
 
         [HttpGet("view")]
         [Authorize(Roles = "Admin,BankUser,NormalUser")]
-        public IActionResult ViewAccount()
+        public IActionResult 
+            ViewAccount()
         {
             try
             {
                 _logger.LogInformation("User {User} accessed /view endpoint", User?.Identity?.Name);
-                return Ok("Account details visible to authorized user.");
+                return Ok(new { message = "Account details visible to authorized user." });
             }
             catch (Exception ex)
             {
@@ -221,6 +222,9 @@ namespace BankCustomerAPI.Controllers
                 return StatusCode(500, new { error = "Internal server error", details = ex.Message });
             }
         }
+
+
+
 
         [HttpPost("manage-users")]
         [Authorize(Roles = "Admin")]

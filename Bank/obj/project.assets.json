@@ -4885,11 +4885,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\C# project\\submission\\Bank\\BankCustomerAPI.csproj",
+      "projectUniqueName": "D:\\C#Project\\submission\\Bank\\BankCustomerAPI.csproj",
       "projectName": "BankCustomerAPI",
-      "projectPath": "D:\\C# project\\submission\\Bank\\BankCustomerAPI.csproj",
+      "projectPath": "D:\\C#Project\\submission\\Bank\\BankCustomerAPI.csproj",
       "packagesPath": "C:\\Users\\shankaranarayanan.v\\.nuget\\packages\\",
-      "outputPath": "D:\\C# project\\submission\\Bank\\obj\\",
+      "outputPath": "D:\\C#Project\\submission\\Bank\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
