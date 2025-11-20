@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+# Banking Aggregator App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and enhanced with React, Material-UI, and Axios to build a full-featured banking aggregator platform.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Overview
+The Banking Aggregator App consolidates multiple banking services into a single platform. Users can manage accounts, view transactions, apply for loans, and track investments. Admin users can manage users and banks.
 
-### `npm start`
+The app is responsive, role-based, and built with secure API integration.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+### User Types
+**Regular Users:**
+- View linked bank accounts
+- Apply for loans
+- Track investments
+- Access transactions  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Admin Users:**
+- Manage users
+- Manage banks
 
-### `npm run build`
+### Authentication
+- **Login Page:** Secure login for users and admins with JWT token session storage  
+- **Role-Based Access:** Redirects unauthorized users and restricts access to sensitive pages  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Navigation
+- **Side Navigation (DrawerMenu):** Displays menu items based on user role  
+  - Home, Plans, About, FAQ, Contact  
+  - Admin: Manage Users, Manage Banks  
+  - Regular User: Accounts, Transactions  
+- Clickable items close the drawer automatically  
+- Modern UI with hover effects  
+- **Routing:** React Router handles page navigation, with a 404 Not Found page for invalid routes  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Landing Page
+- Feature Cards: Savings Account, Current Account, Loans, Investments  
+- Click a card to open a dialog form to perform actions  
+- Clean, card-based UI with hover effects  
+- Dialog shows different forms based on selected feature  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Accounts & Transactions
+- View all linked bank accounts  
+- Paginated, sortable, and searchable grid  
+- View recent transactions with filters by date, type, and account  
 
-### `npm run eject`
+### Loans & Investments
+- Apply for personal or home loans  
+- Track investments including mutual funds and fixed deposits  
+- Summary dashboards for loans and investments  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Admin Pages
+- Manage Users and Banks  
+- Role-based access ensures only admins can manage sensitive data  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Other Pages
+- Plans Page, About Us, FAQ, Contact  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Dialog Forms
+- Contextual forms open when interacting with features  
+- Account forms: create new account, set initial deposit, branch, currency, and limit  
+- Loans and Investments: appropriate application or information forms  
+- Actions integrate with backend APIs using JWT authorization  
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Role-Based Access Control
+- **Admin (roleId = 4):** Manage Users and Banks  
+- **Regular Users (roleId = 5 or 6):** Access Accounts and Transactions  
+- Unauthorized access redirected to login or Not Found page  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## UI/UX Highlights
+- Material-UI design: cards, dialogs, grids, clean typography  
+- Drawer navigation: role-aware menu items  
+- Inline form validation and disabled fields for non-editable data  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## API Integration
+- Axios instance with JWT authorization  
+- Endpoints:
+  - `/Account/create` – create bank accounts  
+  - `/Accounts` – fetch user accounts  
+  - `/Transactions` – fetch transactions  
+  - `/ManageUsers` – admin user management  
+  - `/ManageBanks` – admin bank management  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Project Structure
+Bank/
+├── components/ # Reusable components (FeatureCard, DrawerMenu)
+├── pages/ # Application pages
+├── context/ # Authentication and role context
+├── api/ # Axios configuration and API integration
+├── App.jsx # Main routing and layout
+├── styles/ # Global styles and theme management
+└── README.md
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Installation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Prerequisites
+- Node.js (v22+)  
+- npm (Node package manager)  
 
-### Deployment
+### Steps
+1. Clone the repository:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+git clone https://github.com/Varsha-mohan20/Submission.git
+cd Submission/DotNet/Bank
 
-### `npm run build` fails to minify
+Install dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+npm install @mui/material @emotion/react @emotion/styled @mui/icons-material react-router-dom@6 axios @mui/x-data-grid
+
+Start the application:
+
+npm start
+
+The app should now be running at http://localhost:3000
+.
+
+Available Scripts
+npm start
+
+Runs the app in development mode. The page reloads on changes.
+
+npm test
+
+Launches the test runner in interactive watch mode.
+
+npm run build
+
+Builds the app for production in the build folder, optimizing React for best performance.
+
+npm run eject
+
+Warning: One-way operation. Once ejected, you cannot go back. Allows full control over configuration files and build dependencies.

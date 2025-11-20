@@ -1,4 +1,3 @@
-// src/pages/ManageUsers.jsx
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -19,20 +18,32 @@ import {
   TableRow,
   CircularProgress,
   Box,
+  TablePagination,
+  IconButton,
+  Stack,
 } from "@mui/material";
-import axios from "../api/Authapi"; // your axios instance with baseURL
+import SortIcon from "@mui/icons-material/Sort";
+import SearchIcon from "@mui/icons-material/Search";
+import axios from "../api/Authapi";
 
 const ManageUsers = () => {
   const [showForm, setShowForm] = useState(false);
   const [newUser, setNewUser] = useState({
     userName: "",
     email: "",
-    roleId: 6, // default NormalUser
+    roleId: 6,
   });
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch users from API
+  // UI state additions
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -40,9 +51,8 @@ const ManageUsers = () => {
       const res = await axios.get("/Account/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUsers(res.data); // assuming API returns array of users
+      setUsers(res.data);
     } catch (err) {
-      console.error(err);
       alert("Failed to fetch users");
     } finally {
       setLoading(false);
@@ -72,26 +82,66 @@ const ManageUsers = () => {
       alert(res.data.message || "User registered successfully");
       setNewUser({ userName: "", email: "", roleId: 6 });
       setShowForm(false);
-      fetchUsers(); // refresh list after adding
+      fetchUsers();
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data || "Failed to register user");
+      alert("Failed to register user");
     }
   };
 
+  // Filtering, sorting & search
+  const filteredUsers = users
+    .filter(
+      (u) =>
+        (!roleFilter || u.roleId == roleFilter) &&
+        (!search ||
+          u.userName?.toLowerCase().includes(search.toLowerCase()) ||
+          u.email?.toLowerCase().includes(search.toLowerCase()))
+    )
+    .sort((a, b) => {
+      return sortAsc
+        ? a.userName.localeCompare(b.userName)
+        : b.userName.localeCompare(a.userName);
+    });
+
   return (
     <Container sx={{ mt: 5 }}>
-      <Paper elevation={4} sx={{ p: 4, borderRadius: 2 }}>
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h5">Manage Users</Typography>
-          <Button variant="contained" color="primary" onClick={() => setShowForm(!showForm)}>
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+        }}
+      >
+        {/* HEADER */}
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Typography variant="h4" fontWeight="bold">
+            Manage Users
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={() => setShowForm(!showForm)}
+            sx={{ borderRadius: 2 }}
+          >
             {showForm ? "Cancel" : "Register User"}
           </Button>
         </Grid>
 
+        {/* FORM SECTION */}
         {showForm && (
-          <Paper elevation={2} sx={{ p: 3, mb: 3, backgroundColor: "#f9f9f9" }}>
-            <Typography variant="h6" gutterBottom>Register New User</Typography>
+          <Paper
+            elevation={3}
+            sx={{
+              p: 3,
+              mt: 3,
+              borderRadius: 2,
+              bgcolor: "background.default",
+            }}
+          >
+            <Typography variant="h6" gutterBottom fontWeight="bold">
+              Register New User
+            </Typography>
+
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -102,6 +152,7 @@ const ManageUsers = () => {
                   onChange={handleChange}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   label="Email"
@@ -111,18 +162,31 @@ const ManageUsers = () => {
                   onChange={handleChange}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>Role</InputLabel>
-                  <Select name="roleId" value={newUser.roleId} onChange={handleChange} label="Role">
+                  <Select
+                    name="roleId"
+                    value={newUser.roleId}
+                    label="Role"
+                    onChange={handleChange}
+                  >
                     <MenuItem value={4}>Admin</MenuItem>
                     <MenuItem value={5}>BankUser</MenuItem>
                     <MenuItem value={6}>NormalUser</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
+
               <Grid item xs={12}>
-                <Button variant="contained" color="success" fullWidth onClick={handleSubmit}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  fullWidth
+                  onClick={handleSubmit}
+                  sx={{ borderRadius: 2 }}
+                >
                   Submit
                 </Button>
               </Grid>
@@ -130,45 +194,118 @@ const ManageUsers = () => {
           </Paper>
         )}
 
-        <Typography variant="h6" gutterBottom>All Users</Typography>
+        {/* FILTER + SEARCH */}
+        <Box
+          sx={{
+            mt: 4,
+            p: 2,
+            borderRadius: 2,
+            bgcolor: "background.default",
+          }}
+        >
+          <Typography variant="h6" gutterBottom fontWeight="bold">
+            Users List
+          </Typography>
 
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems="center"
+            mb={2}
+          >
+            {/* Search */}
+            <TextField
+              fullWidth
+              label="Search by Name or Email"
+              InputProps={{
+                startAdornment: <SearchIcon sx={{ mr: 1 }} />,
+              }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+
+            {/* Role Filter */}
+            <FormControl fullWidth>
+              <InputLabel>Filter by Role</InputLabel>
+              <Select
+                value={roleFilter}
+                label="Filter by Role"
+                onChange={(e) => setRoleFilter(e.target.value)}
+              >
+                <MenuItem value="">All</MenuItem>
+                <MenuItem value={4}>Admin</MenuItem>
+                <MenuItem value={5}>BankUser</MenuItem>
+                <MenuItem value={6}>NormalUser</MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* Sort Button */}
+            <IconButton onClick={() => setSortAsc(!sortAsc)}>
+              <SortIcon />
+            </IconButton>
+          </Stack>
+        </Box>
+
+        {/* USERS TABLE */}
         {loading ? (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
             <CircularProgress />
           </Box>
         ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>User ID</TableCell>
-                  <TableCell>Full Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Is Active</TableCell>
-                  <TableCell>Last Login</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>PAN</TableCell>
-                  <TableCell>Aadhar</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((user) => (
-                    <TableRow key={user.userId}>
-                    <TableCell>{user.userId}</TableCell>
-                    <TableCell>{user.userName}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.roleId}</TableCell> {/* or map to role name if you have */}
-                    <TableCell>{user.isActive ? "Yes" : "No"}</TableCell>
-                    <TableCell>{user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "-"}</TableCell>
-                    <TableCell>{user.address}</TableCell>
-                    <TableCell>{user.pan}</TableCell>
-                    <TableCell>{user.aadhar}</TableCell>
-                    </TableRow>
-                ))}
+          <Paper elevation={4} sx={{ borderRadius: 2 }}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>User ID</TableCell>
+                    <TableCell>Full Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Role</TableCell>
+                    <TableCell>Active</TableCell>
+                    <TableCell>Last Login</TableCell>
+                    <TableCell>Address</TableCell>
+                    <TableCell>PAN</TableCell>
+                    <TableCell>Aadhar</TableCell>
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {filteredUsers
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((user) => (
+                      <TableRow key={user.userId} hover>
+                        <TableCell>{user.userId}</TableCell>
+                        <TableCell>{user.userName}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.roleId}</TableCell>
+                        <TableCell>{user.isActive ? "Yes" : "No"}</TableCell>
+                        <TableCell>
+                          {user.lastLogin
+                            ? new Date(user.lastLogin).toLocaleString()
+                            : "-"}
+                        </TableCell>
+                        <TableCell>{user.address}</TableCell>
+                        <TableCell>{user.pan}</TableCell>
+                        <TableCell>{user.aadhar}</TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
-            </Table>
-          </TableContainer>
+              </Table>
+            </TableContainer>
+
+            {/* PAGINATION */}
+            <TablePagination
+              component="div"
+              count={filteredUsers.length}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              onPageChange={(e, p) => setPage(p)}
+              onRowsPerPageChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value, 10));
+                setPage(0);
+              }}
+            />
+          </Paper>
         )}
       </Paper>
     </Container>

@@ -1,99 +1,35 @@
-// import React from "react";
-// import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
-// import { Link, useNavigate } from "react-router-dom";
-// import { useUser } from "../context/UserContext";
-
-// export default function Navbar() {
-//   const { currentUser, setCurrentUser } = useUser();
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     setCurrentUser(null);
-//     navigate("/login");
-//   };
-
-//   return (
-//     <AppBar position="static">
-//       <Toolbar>
-//         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-//           Banking Aggregator
-//         </Typography>
-
-//         {currentUser && (
-//           <Box sx={{ display: "flex", gap: 2 }}>
-//             <Button color="inherit" component={Link} to="/landing">Home</Button>
-//             <Button color="inherit" component={Link} to="/about">About</Button>
-//             <Button color="inherit" component={Link} to="/plans">Plans</Button>
-
-//             {(currentUser.roleId === 5 || currentUser.roleId === 6) && (
-//               <>
-//                 <Button color="inherit" component={Link} to="/accounts">Accounts</Button>
-//                 <Button color="inherit" component={Link} to="/transactions">Transactions</Button>
-//               </>
-//             )}
-
-//             {currentUser.roleId === 4 && (
-//               <>
-//                 <Button color="inherit" component={Link} to="/manage-users">Manage Users</Button>
-//                 <Button color="inherit" component={Link} to="/manage-banks">Manage Banks</Button>
-//               </>
-//             )}
-
-//             <Button color="inherit" onClick={handleLogout}>Logout</Button>
-//           </Box>
-//         )}
-//       </Toolbar>
-//     </AppBar>
-//   );
-// }
-// // src/components/Navbar.jsx
 // import React, { useContext, useState } from "react";
-// import {
-//   AppBar,
-//   Toolbar,
-//   Typography,
-//   IconButton,
-//   Button
-// } from "@mui/material";
+// import { AppBar, Toolbar, Typography, IconButton, Button } from "@mui/material";
+
 // import MenuIcon from "@mui/icons-material/Menu";
 // import Brightness4 from "@mui/icons-material/Brightness4";
 // import Brightness7 from "@mui/icons-material/Brightness7";
 
-// import { ThemeModeContext } from "./ThemeContext";
+// import { useTheme } from "./ThemeContext";
 // import { UserContext } from "../context/UserContext";
 // import DrawerMenu from "./DrawerMenu";
 
 // const Navbar = () => {
 //   const { currentUser, logout } = useContext(UserContext);
-//   const { mode, toggleTheme } = useContext(ThemeModeContext);
+//   const { theme, toggleTheme } = useTheme();
 //   const [drawerOpen, setDrawerOpen] = useState(false);
 
 //   return (
 //     <>
 //       <AppBar position="static" color="primary">
 //         <Toolbar>
-//           {/* Hamburger */}
-//           <IconButton
-//             color="inherit"
-//             edge="start"
-//             onClick={() => setDrawerOpen(true)}
-//           >
+//           <IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
 //             <MenuIcon />
 //           </IconButton>
 
-//           <Typography
-//             variant="h6"
-//             sx={{ flexGrow: 1, ml: 2 }}
-//           >
+//           <Typography variant="h6" sx={{ flexGrow: 1, ml: 2 }}>
 //             Banking Aggregator
 //           </Typography>
 
-//           {/* Dark/Light Mode Toggle */}
 //           <IconButton color="inherit" onClick={toggleTheme}>
-//             {mode === "light" ? <Brightness4 /> : <Brightness7 />}
+//             {theme === "light" ? <Brightness4 /> : <Brightness7 />}
 //           </IconButton>
 
-//           {/* Login/Logout Button */}
 //           {currentUser ? (
 //             <Button color="inherit" onClick={logout}>
 //               Logout
@@ -112,9 +48,18 @@
 // };
 
 // export default Navbar;
+
+// src/components/Navbar.jsx
 // src/components/Navbar.jsx
 import React, { useContext, useState } from "react";
-import { AppBar, Toolbar, Typography, IconButton, Button } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+  Box,
+} from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness4 from "@mui/icons-material/Brightness4";
@@ -131,32 +76,97 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
+      <AppBar
+        position="sticky"
+        elevation={0}
+        color="transparent"
+        sx={{
+          background:
+            theme === "light"
+              ? "linear-gradient(90deg, #4c7bec, #182848)"
+              : "linear-gradient(90deg, #00172d, #003f75)",
+          backdropFilter: "blur(10px)",
+          borderBottom: "1px solid rgba(255,255,255,0.25)",
+          boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
+          padding: "6px 0",
+          zIndex: 1200,
+        }}
+      >
+        <Toolbar sx={{ minHeight: 60 }}>
+          {/* Hamburger Menu */}
+          <IconButton
+            onClick={() => setDrawerOpen(true)}
+            sx={{
+              color: "#fff",
+              mr: 2,
+              p: 1.2,
+              borderRadius: 2,
+              "&:hover": {
+                background: "rgba(255,255,255,0.15)",
+              },
+            }}
+          >
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" sx={{ flexGrow: 1, ml: 2 }}>
+          {/* Brand */}
+          <Typography
+            variant="h5"
+            sx={{
+              flexGrow: 1,
+              fontWeight: 600,
+              letterSpacing: 0.3,
+              color: "#fff",
+            }}
+          >
             Banking Aggregator
           </Typography>
 
-          <IconButton color="inherit" onClick={toggleTheme}>
-            {theme === "light" ? <Brightness4 /> : <Brightness7 />}
-          </IconButton>
+          {/* Right Side Buttons */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {/* Theme Toggle */}
+            <IconButton
+              onClick={toggleTheme}
+              sx={{
+                color: "#fff",
+                borderRadius: 2,
+                border: "1px solid rgba(255,255,255,0.3)",
+                backdropFilter: "blur(4px)",
+                padding: 1,
+                "&:hover": {
+                  background: "rgba(255,255,255,0.2)",
+                },
+              }}
+            >
+              {theme === "light" ? <Brightness4 /> : <Brightness7 />}
+            </IconButton>
 
-          {currentUser ? (
-            <Button color="inherit" onClick={logout}>
-              Logout
-            </Button>
-          ) : (
-            <Button color="inherit" href="/login">
-              Login
-            </Button>
-          )}
+            {/* Logout */}
+            {currentUser && (
+              <Button
+                onClick={logout}
+                sx={{
+                  background: "rgba(255,255,255,0.25)",
+                  color: "#fff",
+                  textTransform: "none",
+                  borderRadius: 2,
+                  px: 2.5,
+                  py: 0.8,
+                  fontSize: "0.95rem",
+                  fontWeight: 500,
+                  "&:hover": {
+                    background: "rgba(255,255,255,0.4)",
+                  },
+                }}
+              >
+                Logout
+              </Button>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 
+      {/* Drawer */}
       <DrawerMenu open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </>
   );
